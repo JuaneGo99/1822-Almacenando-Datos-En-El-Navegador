@@ -21,10 +21,14 @@ export const addTask = (evento) =>{
     // Limpienado los campos a DEFAULT 
     input.value = '';
     calender.value = '';
+
+    const complete = false;
     // Almanacenar los datos a un objeto
     const taskObj = {
        value,
        dateFormat,
+       complete,
+       id: uuid.v4(),
     }
     // Limpiamos todo el contenedor de LISTA
     list.innerHTML = '';
@@ -38,15 +42,23 @@ export const addTask = (evento) =>{
     displayTasks();
 };
   
-export const createTask = ( {value, dateFormat} ) => { 
+export const createTask = ( {value, dateFormat, complete, id} ) => { 
     const task = document.createElement('li');
           task.classList.add('card');
     //backticks
     const taskContent = document.createElement('div');
+
+    const check = checkComplete(id);
+    if(complete){
+        check.classList.toggle('fas');
+        check.classList.toggle('completeIcon');
+        check.classList.toggle('far');
+    }
+
     const titleTask = document.createElement('span');
           titleTask.classList.add('task');
           titleTask.innerText = value;
-          taskContent.appendChild(checkComplete());
+          taskContent.appendChild(check);
           taskContent.appendChild(titleTask);
     // task.innerHTML = content;
     const dateElement = document.createElement('span');
@@ -54,7 +66,7 @@ export const createTask = ( {value, dateFormat} ) => {
           // Agregando los taks
           task.appendChild(taskContent);
           task.appendChild(dateElement);
-          task.appendChild(deleteIcon());
+          task.appendChild(deleteIcon(id));
     return task;
 };
   
